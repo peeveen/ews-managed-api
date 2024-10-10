@@ -86,7 +86,7 @@ namespace Microsoft.Exchange.WebServices.Data
         /// <returns>
         /// A <see cref="T:System.Net.HttpWebResponse"/> that contains the response from the Internet resource.
         /// </returns>
-        public async Task<IEwsHttpWebResponse> GetResponse(CancellationToken token)
+        public async Task<IEwsHttpWebResponse> GetResponse(CancellationToken token, HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead)
         {
             var message = new HttpRequestMessage(new HttpMethod(Method), RequestUri);
             message.Content = new StringContent(Content);
@@ -112,7 +112,7 @@ namespace Microsoft.Exchange.WebServices.Data
             HttpResponseMessage response = null;
             try
             {
-                response = await _httpClient.SendAsync(message, token);
+                response = await _httpClient.SendAsync(message, completionOption, token);
             }
             catch (Exception exception)
             {
@@ -281,7 +281,7 @@ namespace Microsoft.Exchange.WebServices.Data
         }
 
         /// <summary>
-        /// Gets or sets the name of the connection group for the request. 
+        /// Gets or sets the name of the connection group for the request.
         /// </summary>
         public string ConnectionGroupName
         {

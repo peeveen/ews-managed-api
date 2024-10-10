@@ -31,6 +31,7 @@ namespace Microsoft.Exchange.WebServices.Data
     using System.IO.Compression;
     using System.Linq;
     using System.Net;
+    using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Text;
     using System.Threading;
@@ -48,13 +49,13 @@ namespace Microsoft.Exchange.WebServices.Data
         /// in the request header.
         /// </summary>
         /// <remarks>
-        /// Note: Setting this values will route the request directly to the backend hosting the 
+        /// Note: Setting this values will route the request directly to the backend hosting the
         /// AnchorMailbox. These headers should be used primarily for UnifiedGroup scenario where
         /// a request needs to be routed directly to the group mailbox versus the user mailbox.
         /// </remarks>
         private const string AnchorMailboxHeaderName = "X-AnchorMailbox";
         private const string ExplicitLogonUserHeaderName = "X-OWA-ExplicitLogonUser";
-       
+
         private static readonly string[] RequestIdResponseHeaders = new[] { "RequestId", "request-id", };
         private const string XMLSchemaNamespace = "http://www.w3.org/2001/XMLSchema";
         private const string XMLSchemaInstanceNamespace = "http://www.w3.org/2001/XMLSchema-instance";
@@ -312,7 +313,7 @@ namespace Microsoft.Exchange.WebServices.Data
             // the request, so bandwidth consumption is not an issue. Against Exchange 2010 and above, we emit
             // the full time zone header but only when the request actually needs it.
             //
-            // The exception to this is if we are in Exchange2007 Compat Mode, in which case we should never emit 
+            // The exception to this is if we are in Exchange2007 Compat Mode, in which case we should never emit
             // the header.  (Note: Exchange2007 Compat Mode is enabled for testability purposes only.)
             //
             if ((this.Service.RequestedServerVersion == ExchangeVersion.Exchange2007_SP1 || this.EmitTimeZoneHeader) &&
@@ -604,7 +605,7 @@ namespace Microsoft.Exchange.WebServices.Data
 
                 reader.Read();
 
-                // EWS doesn't always return a SOAP header. If this response contains a header element, 
+                // EWS doesn't always return a SOAP header. If this response contains a header element,
                 // read the server version information contained in the header.
                 if (reader.IsStartElement(soapNamespace, XmlElementNames.SOAPHeaderElementName))
                 {
@@ -655,7 +656,7 @@ namespace Microsoft.Exchange.WebServices.Data
         /// </summary>
         /// <param name="request">The request.</param>
         /// <returns>The response returned by the server.</returns>
-        protected async Task<Tuple<IEwsHttpWebRequest, IEwsHttpWebResponse>> ValidateAndEmitRequest(CancellationToken token)
+        protected async Task<Tuple<IEwsHttpWebRequest, IEwsHttpWebResponse>> ValidateAndEmitRequest(CancellationToken token, HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead)
         {
             this.Validate();
 
@@ -686,7 +687,7 @@ namespace Microsoft.Exchange.WebServices.Data
 
                 try
                 {
-                    response = await this.GetEwsHttpWebResponse(request, token).ConfigureAwait(false);
+                    response = await this.GetEwsHttpWebResponse(request, token, completionOption).ConfigureAwait(false);
                 }
                 finally
                 {
@@ -792,11 +793,11 @@ namespace Microsoft.Exchange.WebServices.Data
         /// </summary>
         /// <param name="request">The specified IEwsHttpWebRequest</param>
         /// <returns>An IEwsHttpWebResponse instance</returns>
-        protected async Task<IEwsHttpWebResponse> GetEwsHttpWebResponse(IEwsHttpWebRequest request, CancellationToken token)
+        protected async Task<IEwsHttpWebResponse> GetEwsHttpWebResponse(IEwsHttpWebRequest request, CancellationToken token, HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead)
         {
             try
             {
-                return await request.GetResponse(token).ConfigureAwait(false);
+                return await request.GetResponse(token, completionOption).ConfigureAwait(false);
             }
             catch (EwsHttpClientException ex)
             {
@@ -832,7 +833,7 @@ namespace Microsoft.Exchange.WebServices.Data
                         this.Service.ProcessHttpResponseHeaders(TraceFlags.EwsResponseHttpHeaders, httpWebResponse);
 
                         // If tracing is enabled, we read the entire response into a MemoryStream so that we
-                        // can pass it along to the ITraceListener. Then we parse the response from the 
+                        // can pass it along to the ITraceListener. Then we parse the response from the
                         // MemoryStream.
                         if (this.Service.IsTraceEnabledFor(TraceFlags.EwsResponse))
                         {

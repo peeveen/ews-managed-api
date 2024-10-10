@@ -28,6 +28,7 @@ namespace Microsoft.Exchange.WebServices.Data
     using System;
     using System.IO;
     using System.Net;
+    using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Security.Cryptography.X509Certificates;
     using System.Threading;
@@ -36,7 +37,7 @@ namespace Microsoft.Exchange.WebServices.Data
     /// <summary>
     /// HttpWebRequest proxy interface.
     /// </summary>
-    internal interface IEwsHttpWebRequest : IDisposable 
+    internal interface IEwsHttpWebRequest : IDisposable
     {
         /// <summary>
         /// Cancels request to an Internet resource.
@@ -60,23 +61,23 @@ namespace Microsoft.Exchange.WebServices.Data
         /// <returns>
         /// A <see cref="T:System.Net.HttpWebResponse"/> that contains the response from the Internet resource.
         /// </returns>
-        Task<IEwsHttpWebResponse> GetResponse(CancellationToken token);
+        Task<IEwsHttpWebResponse> GetResponse(CancellationToken token, HttpCompletionOption completionOption = HttpCompletionOption.ResponseContentRead);
 
         /// <summary>
         /// Gets or sets the value of the Accept HTTP header.
         /// </summary>
         /// <returns>The value of the Accept HTTP header. The default value is null.</returns>
         string Accept
-        { 
-            get; set; 
+        {
+            get; set;
         }
 
         /// <summary>
         /// Gets or sets a value that indicates whether the request should follow redirection responses.
         /// </summary>
         bool AllowAutoRedirect
-        { 
-            get; set; 
+        {
+            get; set;
         }
 
         /// <summary>
@@ -93,8 +94,8 @@ namespace Microsoft.Exchange.WebServices.Data
         /// </summary>
         /// <returns>The value of the Content-type HTTP header. The default value is null.</returns>
         string ContentType
-        { 
-            get; set; 
+        {
+            get; set;
         }
 
         /// <summary>
@@ -102,8 +103,8 @@ namespace Microsoft.Exchange.WebServices.Data
         /// </summary>
         /// <value>The cookie container.</value>
         CookieContainer CookieContainer
-        { 
-            get; set; 
+        {
+            get; set;
         }
 
         /// <summary>
@@ -121,8 +122,8 @@ namespace Microsoft.Exchange.WebServices.Data
         /// </summary>
         /// <returns>A <see cref="T:System.Net.WebHeaderCollection"/> that contains the name/value pairs that make up the headers for the HTTP request.</returns>
         HttpRequestHeaders Headers
-        { 
-            get; 
+        {
+            get;
         }
 
         /// <summary>
@@ -131,8 +132,8 @@ namespace Microsoft.Exchange.WebServices.Data
         /// <returns>The request method to use to contact the Internet resource. The default value is GET.</returns>
         /// <exception cref="T:System.ArgumentException">No method is supplied.-or- The method string contains invalid characters. </exception>
         string Method
-        { 
-            get; set; 
+        {
+            get; set;
         }
 
         /// <summary>
@@ -140,8 +141,8 @@ namespace Microsoft.Exchange.WebServices.Data
         /// </summary>
         /// <returns>true to send a WWW-authenticate HTTP header with requests after authentication has taken place; otherwise, false. The default is false.</returns>
         bool PreAuthenticate
-        { 
-            get; set; 
+        {
+            get; set;
         }
 
         /// <summary>
@@ -157,8 +158,8 @@ namespace Microsoft.Exchange.WebServices.Data
         /// </summary>
         /// <returns>A <see cref="T:System.Uri"/> that contains the URI of the Internet resource passed to the <see cref="M:System.Net.WebRequest.Create(System.String)"/> method.</returns>
         Uri RequestUri
-        { 
-            get; 
+        {
+            get;
         }
 
         /// <summary>
@@ -166,8 +167,8 @@ namespace Microsoft.Exchange.WebServices.Data
         /// </summary>
         /// <returns>The number of milliseconds to wait before the request times out. The default is 100,000 milliseconds (100 seconds).</returns>
         int Timeout
-        { 
-            get; set; 
+        {
+            get; set;
         }
 
         /// <summary>
@@ -175,8 +176,8 @@ namespace Microsoft.Exchange.WebServices.Data
         /// </summary>
         /// <returns>true if the default credentials are used; otherwise false. The default value is false.</returns>
         bool UseDefaultCredentials
-        { 
-            get; set; 
+        {
+            get; set;
         }
 
         /// <summary>
@@ -184,8 +185,8 @@ namespace Microsoft.Exchange.WebServices.Data
         /// </summary>
         /// <returns>The value of the User-agent HTTP header. The default value is null.The value for this property is stored in <see cref="T:System.Net.WebHeaderCollection"/>. If WebHeaderCollection is set, the property value is lost.</returns>
         string UserAgent
-        { 
-            get; set; 
+        {
+            get; set;
         }
 
         /// <summary>
@@ -197,7 +198,7 @@ namespace Microsoft.Exchange.WebServices.Data
         }
 
         /// <summary>
-        /// Gets or sets the name of the connection group for the request. 
+        /// Gets or sets the name of the connection group for the request.
         /// </summary>
         string ConnectionGroupName
         {

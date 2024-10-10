@@ -29,6 +29,7 @@ namespace Microsoft.Exchange.WebServices.Data
     using System.IO;
     using System.IO.Compression;
     using System.Net;
+    using System.Net.Http;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
@@ -166,7 +167,7 @@ namespace Microsoft.Exchange.WebServices.Data
         {
             lock (this.lockObject)
             {
-                var tuple = this.ValidateAndEmitRequest(token).Result;
+                var tuple = this.ValidateAndEmitRequest(token, HttpCompletionOption.ResponseHeadersRead).Result;
                 this.request = tuple.Item1;
                 this.response = tuple.Item2;
 
@@ -333,7 +334,7 @@ namespace Microsoft.Exchange.WebServices.Data
         }
 
         /// <summary>
-        /// Perform any bookkeeping needed when we connect 
+        /// Perform any bookkeeping needed when we connect
         /// </summary>
         private void InternalOnConnect()
         {

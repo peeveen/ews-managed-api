@@ -50,7 +50,7 @@ namespace Microsoft.Exchange.WebServices.Data
         /// Initializes a new instance of the <see cref="MeetingRequest"/> class.
         /// </summary>
         /// <param name="service">EWS service to which this object belongs.</param>
-        internal MeetingRequest(ExchangeService service)
+        public MeetingRequest(ExchangeService service)
             : base(service)
         {
         }
@@ -125,7 +125,7 @@ namespace Microsoft.Exchange.WebServices.Data
         }
 
         /// <summary>
-        /// Accepts the meeting. Calling this method results in a call to EWS. 
+        /// Accepts the meeting. Calling this method results in a call to EWS.
         /// </summary>
         /// <param name="sendResponse">Indicates whether to send a response to the organizer.</param>
         /// <returns>
@@ -138,7 +138,7 @@ namespace Microsoft.Exchange.WebServices.Data
         }
 
         /// <summary>
-        /// Tentatively accepts the meeting. Calling this method results in a call to EWS. 
+        /// Tentatively accepts the meeting. Calling this method results in a call to EWS.
         /// </summary>
         /// <param name="sendResponse">Indicates whether to send a response to the organizer.</param>
         /// <returns>
@@ -262,7 +262,7 @@ namespace Microsoft.Exchange.WebServices.Data
         }
 
         /// <summary>
-        /// Gets a value indicating the free/busy status of the owner of this appointment. 
+        /// Gets a value indicating the free/busy status of the owner of this appointment.
         /// </summary>
         public LegacyFreeBusyStatus LegacyFreeBusyStatus
         {

@@ -50,7 +50,7 @@ namespace Microsoft.Exchange.WebServices.Data
         /// Initializes a new instance of the <see cref="MeetingCancellation"/> class.
         /// </summary>
         /// <param name="service">EWS service to which this object belongs.</param>
-        internal MeetingCancellation(ExchangeService service)
+        public MeetingCancellation(ExchangeService service)
             : base(service)
         {
         }
@@ -65,7 +65,7 @@ namespace Microsoft.Exchange.WebServices.Data
         /// <returns>A MeetingCancellation instance representing the meeting cancellation message corresponding to the specified Id.</returns>
         public static new Task<MeetingCancellation> Bind(
             ExchangeService service,
-            ItemId id, 
+            ItemId id,
             PropertySet propertySet,
             CancellationToken token = default(CancellationToken))
         {

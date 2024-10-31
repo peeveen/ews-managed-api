@@ -50,7 +50,7 @@ namespace Microsoft.Exchange.WebServices.Data
         /// Initializes a new instance of the <see cref="MeetingResponse"/> class.
         /// </summary>
         /// <param name="service">EWS service to which this object belongs.</param>
-        internal MeetingResponse(ExchangeService service)
+        public MeetingResponse(ExchangeService service)
             : base(service)
         {
         }
